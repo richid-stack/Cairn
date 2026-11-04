@@ -13,6 +13,8 @@ Cairn is a personal-agent app that handles errands, money and scheduling, and as
 | [docs/frontend-plan.md](docs/frontend-plan.md) | Frontend architecture, 13 phases, craft standards, quality gates |
 | [docs/backend-plan.md](docs/backend-plan.md)   | Backend architecture, trust layer, 13 phases, solo timeline      |
 | [docs/decisions.md](docs/decisions.md)         | Decisions made and decisions still open                          |
+| [docs/motion.md](docs/motion.md)               | Motion rules and timing                                          |
+| [docs/i18n.md](docs/i18n.md)                   | Translation and right-to-left approach                           |
 
 The full versions, with architecture and roadmap drawings, live as documents in the Cairn project on claude.ai. The links are at the top of each plan file.
 

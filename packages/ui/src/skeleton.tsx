@@ -1,5 +1,8 @@
+'use client';
+
 import type { CSSProperties, ReactNode } from 'react';
 import { cx } from './cx';
+import { useUiStrings } from './i18n';
 import { VisuallyHidden } from './visually-hidden';
 
 export interface SkeletonProps {
@@ -32,16 +35,11 @@ export function SkeletonText({ lines = 3 }: { lines?: number }) {
 }
 
 /** Wraps skeletons so a screen reader hears one short "Loading" instead of silence. */
-export function SkeletonGroup({
-  label = 'Loading',
-  children,
-}: {
-  label?: string;
-  children: ReactNode;
-}) {
+export function SkeletonGroup({ label, children }: { label?: string; children: ReactNode }) {
+  const strings = useUiStrings();
   return (
     <div role="status" aria-busy="true" className="cairn-skeleton-group">
-      <VisuallyHidden>{label}</VisuallyHidden>
+      <VisuallyHidden>{label ?? strings.loading}</VisuallyHidden>
       {children}
     </div>
   );

@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Button } from './button';
+import { useUiStrings } from './i18n';
 import { Icon, type IconName } from './icon';
 import { VisuallyHidden } from './visually-hidden';
 
@@ -44,7 +45,6 @@ export function useToast(): ToastApi {
 }
 
 const toneIcon: Record<ToastTone, IconName> = { info: 'info', success: 'success', danger: 'error' };
-const toneWord: Record<ToastTone, string> = { info: 'Note', success: 'Done', danger: 'Problem' };
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
@@ -87,6 +87,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 }
 
 function ToastItem({ toast, onDismiss }: { toast: ToastEntry; onDismiss: (id: number) => void }) {
+  const strings = useUiStrings();
+  const toneWord = {
+    info: strings.toastNote,
+    success: strings.toastDone,
+    danger: strings.toastProblem,
+  };
   const [paused, setPaused] = useState(false);
   const tone = toast.tone ?? 'info';
   const duration = toast.duration ?? (toast.action || tone === 'danger' ? 10_000 : 5_000);
@@ -109,7 +115,7 @@ function ToastItem({ toast, onDismiss }: { toast: ToastEntry; onDismiss: (id: nu
       onBlur={() => setPaused(false)}
     >
       <Icon name={toneIcon[tone]} className="cairn-toast-icon" />
-      <p className="cairn-toast-message">
+      <p className="cairn-toast-message" dir="auto">
         <VisuallyHidden>{toneWord[tone]}: </VisuallyHidden>
         {toast.message}
       </p>
@@ -125,7 +131,12 @@ function ToastItem({ toast, onDismiss }: { toast: ToastEntry; onDismiss: (id: nu
           {toast.action.label}
         </Button>
       ) : null}
-      <Button size="sm" variant="ghost" aria-label="Dismiss" onClick={() => onDismiss(toast.id)}>
+      <Button
+        size="sm"
+        variant="ghost"
+        aria-label={strings.dismiss}
+        onClick={() => onDismiss(toast.id)}
+      >
         <Icon name="close" size="sm" />
       </Button>
     </div>

@@ -13,6 +13,7 @@ import {
   type ButtonVariant,
 } from '@cairn/ui';
 import { DialogDemo } from './dialog-demo';
+import { LocaleSwitcher } from './locale';
 import { OverlayDemo } from './overlay-demo';
 import { ThemeSwitcher } from './theme-switcher';
 
@@ -49,6 +50,10 @@ export default function Home() {
             </li>
           ))}
         </ul>
+      </section>
+      <section>
+        <h2>Language and direction</h2>
+        <LocaleSwitcher />
       </section>
       <section>
         <h2>Theme</h2>

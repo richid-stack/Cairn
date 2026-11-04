@@ -1,4 +1,19 @@
-/* Cairn components. Everything reads the --cairn-* tokens; nothing here has a color of its own. */
+/* Cairn components. Everything reads the --cairn-* tokens; nothing here has a color of its own.
+   Layout uses logical properties (inline-start, inline-end) so right-to-left needs no overrides. A
+   test fails on a physical left or right unless the line says why with "physical-ok". */
+
+/* 1 for left-to-right, -1 for right-to-left. Multiply a horizontal distance by it. */
+:root {
+  --cairn-dir: 1;
+}
+[dir='rtl'] {
+  --cairn-dir: -1;
+}
+
+/* Icons that point somewhere mirror in right-to-left: arrows, chevrons, undo. */
+[dir='rtl'] .cairn-icon[data-directional] {
+  transform: scaleX(-1);
+}
 
 .cairn-visually-hidden {
   position: absolute;
@@ -137,14 +152,14 @@
   width: 100%;
   height: 100%;
   border: 2px solid currentColor;
-  border-right-color: transparent;
+  border-inline-end-color: transparent;
   border-radius: 50%;
   animation: cairn-spin 800ms linear infinite;
 }
 
 @keyframes cairn-spin {
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* physical-ok: a full turn */
   }
 }
 
@@ -153,7 +168,7 @@
   .cairn-spinner-ring {
     animation: none;
     border-style: dotted;
-    border-right-color: currentColor;
+    border-inline-end-color: currentColor;
   }
 }
 
@@ -294,7 +309,7 @@
   content: '';
   position: absolute;
   top: 50%;
-  left: 0.2rem;
+  inset-inline-start: 0.2rem;
   width: 0.85rem;
   height: 0.85rem;
   border-radius: 50%;
@@ -312,7 +327,7 @@
 
 .cairn-switch:checked::after {
   background: var(--cairn-color-on-accent);
-  transform: translate(1rem, -50%);
+  transform: translate(calc(1rem * var(--cairn-dir)), -50%);
 }
 
 @media (pointer: coarse) {
@@ -390,7 +405,7 @@
 .cairn-select {
   width: 100%;
   appearance: none;
-  padding-right: var(--cairn-space-8);
+  padding-inline-end: var(--cairn-space-8);
   cursor: pointer;
 }
 
@@ -398,12 +413,14 @@
   content: '';
   position: absolute;
   top: 50%;
-  right: var(--cairn-space-4);
+  inset-inline-end: var(--cairn-space-4);
   width: 0.5rem;
   height: 0.5rem;
+  /* physical-ok: a symmetric chevron drawn with two sides, rotated 45 degrees; it does not mirror */
   border-right: 2px solid var(--cairn-color-text-muted);
+  /* physical-ok */
   border-bottom: 2px solid var(--cairn-color-text-muted);
-  transform: translateY(-70%) rotate(45deg);
+  transform: translateY(-70%) rotate(45deg); /* physical-ok: vertical shift and a symmetric turn */
   pointer-events: none;
 }
 
@@ -417,7 +434,7 @@
   position: absolute;
   z-index: 20;
   top: calc(100% + var(--cairn-space-1));
-  left: 0;
+  inset-inline-start: 0;
   display: grid;
   min-width: 12rem;
   padding: var(--cairn-space-1);
@@ -441,7 +458,7 @@
   color: var(--cairn-color-text);
   font: inherit;
   font-size: var(--cairn-text-sm);
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 }
 
@@ -469,9 +486,8 @@
 .cairn-toast-region {
   position: fixed;
   z-index: 30;
-  right: var(--cairn-space-4);
+  inset-inline: var(--cairn-space-4);
   bottom: calc(var(--cairn-space-4) + env(safe-area-inset-bottom));
-  left: var(--cairn-space-4);
   display: grid;
   justify-items: end;
   gap: var(--cairn-space-2);
@@ -491,7 +507,7 @@
   max-width: min(28rem, 100%);
   padding: var(--cairn-space-2) var(--cairn-space-2) var(--cairn-space-2) var(--cairn-space-4);
   border: 1px solid var(--cairn-color-border-strong);
-  border-left-width: 4px;
+  border-inline-start-width: 4px;
   border-radius: var(--cairn-radius-lg);
   background: var(--cairn-color-surface);
   color: var(--cairn-color-text);
@@ -501,13 +517,13 @@
 }
 
 .cairn-toast[data-tone='success'] {
-  border-left-color: var(--cairn-color-success);
+  border-inline-start-color: var(--cairn-color-success);
 }
 .cairn-toast[data-tone='danger'] {
-  border-left-color: var(--cairn-color-danger);
+  border-inline-start-color: var(--cairn-color-danger);
 }
 .cairn-toast[data-tone='info'] {
-  border-left-color: var(--cairn-color-accent);
+  border-inline-start-color: var(--cairn-color-accent);
 }
 
 .cairn-toast-message {

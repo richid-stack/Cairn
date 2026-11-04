@@ -22,7 +22,7 @@ export function Button({
   variant = 'primary',
   size = 'md',
   loading = false,
-  loadingLabel = 'Loading',
+  loadingLabel,
   icon,
   type = 'button',
   disabled,

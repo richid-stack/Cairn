@@ -1,4 +1,5 @@
 import type { ComponentProps } from 'react';
+import { cx } from './cx';
 import {
   Bell,
   Calendar,
@@ -79,6 +80,9 @@ const icons = {
 export type IconName = keyof typeof icons;
 export const iconNames = Object.keys(icons) as IconName[];
 
+// Icons that point somewhere flip in right-to-left. The rest, like a magnifying glass, do not.
+const directional = new Set<IconName>(['chevron-left', 'chevron-right', 'send', 'undo']);
+
 const sizes = { sm: 16, md: 20, lg: 24 } as const;
 export type IconSize = keyof typeof sizes;
 
@@ -99,7 +103,8 @@ export function Icon({ name, size = 'md', label, className, ...props }: IconProp
       width={sizes[size]}
       height={sizes[size]}
       strokeWidth={1.75}
-      className={className}
+      className={cx('cairn-icon', className)}
+      data-directional={directional.has(name) || undefined}
       focusable="false"
       {...(label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': true })}
       {...props}

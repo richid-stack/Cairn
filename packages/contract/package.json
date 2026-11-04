@@ -1,0 +1,29 @@
+{
+  "name": "@cairn/contract",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenAPI spec, streaming event schema, generated types, client, conformance suite and analytics taxonomy",
+  "exports": {
+    ".": "./src/index.ts",
+    "./conformance": "./src/conformance.ts",
+    "./spec": "./src/spec.ts",
+    "./openapi/cairn.v1.yaml": "./openapi/cairn.v1.yaml"
+  },
+  "scripts": {
+    "gen": "openapi-typescript openapi/cairn.v1.yaml -o src/generated/api.d.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^16.0.5",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "openapi-fetch": "^0.17.0",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0",
+    "vitest": "^5.1.0"
+  }
+}

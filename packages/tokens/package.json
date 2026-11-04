@@ -1,0 +1,20 @@
+{
+  "name": "@cairn/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cairn design tokens, derived from the logo. Source in src/tokens.ts, CSS generated to dist/.",
+  "exports": {
+    ".": "./src/tokens.ts",
+    "./tokens.css": "./dist/tokens.css"
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15",
+    "vitest": "^5.1.0"
+  }
+}

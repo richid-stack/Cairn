@@ -2,29 +2,46 @@
 
 ## Made
 
-| Decision | Answer | Date |
-| --- | --- | --- |
-| Product name | Cairn | 2026-11-03 |
-| Logo | Three stacked stones (blue, black, blue) beside a bold black wordmark. Image in `assets/brand/` | 2026-11-03 |
-| Repository | github.com/richid-stack/cairn | 2026-11-03 |
-| Team | Solo to start; others may join later | 2026-11-03 |
-| Platforms | Web first, as an installable app; native later | 2026-11-03 |
-| Backend scope | Planned to the same depth as the frontend and built alongside it, in vertical slices | 2026-11-03 |
-| Agent names | Users name their own agent. Shortlist for the default: Tor, Waymark, Lodestar, Basalt, Keystone, Kestrel. Availability and trademarks not yet checked | 2026-11-03 |
+| Decision                   | Answer                                                                                                                                                                                                                                | Date       |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Product name               | Cairn                                                                                                                                                                                                                                 | 2026-11-03 |
+| Logo                       | Three stacked stones (blue, black, blue) beside a bold black wordmark. Image in `assets/brand/`                                                                                                                                       | 2026-11-03 |
+| Repository                 | github.com/richid-stack/cairn                                                                                                                                                                                                         | 2026-11-03 |
+| Team                       | Solo to start; others may join later                                                                                                                                                                                                  | 2026-11-03 |
+| Platforms                  | Web first, as an installable app; native later                                                                                                                                                                                        | 2026-11-03 |
+| Backend scope              | Planned to the same depth as the frontend and built alongside it, in vertical slices                                                                                                                                                  | 2026-11-03 |
+| Agent names                | Users name their own agent. Shortlist for the default: Tor, Waymark, Lodestar, Basalt, Keystone, Kestrel. Availability and trademarks not yet checked                                                                                 | 2026-11-03 |
+| Open source                | Cairn is built as a large open-source project, so it must be self-hostable and contributor-friendly. License still to choose (see Open)                                                                                               | 2026-11-03 |
+| Models: bring your own key | Users connect their own keys for many model providers. Keys are encrypted, never returned by any route and never logged. The agent talks to models through one provider-adapter interface. Contract v0 has the catalog and key routes | 2026-11-03 |
+| Sign-in methods            | Google, Microsoft, GitHub, Apple, email code, passkeys, and organization single sign-on (SAML and OIDC). An instance enables a subset. Contract v0 lists them at `/v1/auth/providers`                                                 | 2026-11-03 |
+| Backend language           | TypeScript for the API, runtime, realtime and connectors. See the note below                                                                                                                                                          | 2026-11-04 |
+| Hosting approach           | Everything runs in containers with a Docker Compose setup, so any host works and self-hosting is easy. First managed host is chosen at the first deploy                                                                               | 2026-11-04 |
+| Payments                   | A payment-provider interface with Stripe and Paystack adapters. Ghana is the home country; Stripe may need a US entity, Paystack supports Ghana directly. See the note below                                                          | 2026-11-04 |
+| Brand icons                | Every connector, sign-in method and model provider shows its real logo, used under each brand's guidelines. See `docs/brand-icons.md`                                                                                                 | 2026-11-04 |
+| Tooling                    | pnpm workspaces, TypeScript strict, ESLint, Prettier, Vitest, Fastify, Next.js, GitHub Actions                                                                                                                                        | 2026-11-04 |
+
+### Language note
+
+The big companies mix languages because of history and scale. Public sources list Meta using PHP and Hack for the main backend, Python for AI work and C++ for hot paths; Google using C++, Python and Go; Netflix using Java, Python and Node.js; Amazon mostly Java; Microsoft mostly C# ([LangPop](https://langpop.com/blog/programming-languages-faang)). The capture of Muse's web build was frontend only, so it says nothing about Muse's own backend language.
+
+For Cairn, one main language is the better start: TypeScript shares types with the frontend, has strong OAuth and SDK support, and is the easiest for open-source contributors. Because every service is checked against the same OpenAPI contract, a service can later be rewritten in Go, Rust or Python without touching the rest. Python is the likeliest second language, for evaluation and machine-learning tools.
+
+### Payments note
+
+Stripe's own country list should be checked directly. A Ghana-registered business may not be able to open a Stripe account, and one commonly cited route is a US company, usually an LLC, with a US bank account ([Zenind](https://www.zenind.com/help/post/how-ghana-founders-can-open-a-stripe-account-with-a-us-llc)). As far as I know, Paystack supports Ghana directly. Hence the adapter interface: Stripe where the business can use it, Paystack and others where it cannot. Get qualified advice before the wallet phase.
 
 ## Open
 
-| Decision | Options | Needed before |
-| --- | --- | --- |
-| Default agent name | Pick from the shortlist, after checking availability | Frontend Phase 3 |
-| Brand files | Vector logo and the exact blue and black | Frontend Phase 0 tokens |
-| First-release languages | English first, with translation and right-to-left support built in from the start | Frontend Phase 1 |
-| Backend language | TypeScript as proposed, or another | B0 |
-| Hosting | Managed container platform first, or a major cloud | B0 |
-| Authentication | Vetted library, or a managed provider | B1 |
-| Business registration country | Decides payment providers, tax and data rules | B8, and before beta |
-| Payment provider | Depends on the country; availability to be checked | B8 |
-| Model providers | Claude first behind a gateway, or more than one from the start | B3 |
-| First connectors | Calendar, email, files as proposed | B5 |
-| Data region and retention | Where data lives and how long it is kept | Before beta |
-| Extra help | Hire or contract an engineer, and from when | Month 6 review |
+| Decision                | Options                                                                                                                                                                       | Needed before                 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| License                 | Apache-2.0 (permissive, patent grant, easiest adoption), AGPL-3.0 (hosted forks must share their changes), MIT, or open core. No `LICENSE` file is added until this is chosen | The first outside contributor |
+| Default agent name      | Pick from the shortlist, after checking availability                                                                                                                          | Frontend Phase 3              |
+| Brand files             | Vector logo and the exact blue and black                                                                                                                                      | Frontend Phase 1              |
+| First-release languages | English first, with translation and right-to-left support built in from the start                                                                                             | Frontend Phase 1              |
+| Authentication library  | A vetted TypeScript library, or a managed provider. Needs Google, Microsoft, GitHub, Apple, email code, passkeys and SAML or OIDC single sign-on                              | B1                            |
+| First managed host      | Fly.io, Render, Railway, Google Cloud Run, AWS (ECS or Fargate), Azure Container Apps, or a Hetzner server with Coolify. Web app on Vercel or Cloudflare                      | First deploy                  |
+| Business registration   | Where the company is registered decides payment providers, tax and data rules                                                                                                 | B8, and before beta           |
+| Default model provider  | Which provider the hosted instance uses when a user brings no key                                                                                                             | B3                            |
+| First connectors        | Calendar, email, files as proposed                                                                                                                                            | B5                            |
+| Data region, retention  | Where data lives and how long it is kept                                                                                                                                      | Before beta                   |
+| Extra help              | Hire or contract an engineer, and from when                                                                                                                                   | Month 6 review                |

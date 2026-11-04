@@ -1,0 +1,21 @@
+{
+  "name": "@cairn/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The Cairn API. Phase B0: health and sign-in methods are real; every other contract route answers 501.",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@cairn/contract": "workspace:*",
+    "fastify": "^5.12.8",
+    "tsx": "^4.23.15"
+  },
+  "devDependencies": {
+    "vitest": "^5.1.0"
+  }
+}

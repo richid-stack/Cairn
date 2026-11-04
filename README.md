@@ -4,15 +4,15 @@
 
 Cairn is a personal-agent app that handles errands, money and scheduling, and asks before it acts. A cairn marks a path; Cairn's agent shows where it has been and asks before it goes further.
 
-**Status:** planning. No application code yet. The first code lands with Phase 0 (see the plans below).
+**Status:** Phase 0, foundations. The workspace, contract, mock server, blank API, design tokens and a blank web shell exist. Nothing is deployed yet.
 
 ## Plans
 
-| Doc | What it covers |
-| --- | --- |
+| Doc                                            | What it covers                                                   |
+| ---------------------------------------------- | ---------------------------------------------------------------- |
 | [docs/frontend-plan.md](docs/frontend-plan.md) | Frontend architecture, 13 phases, craft standards, quality gates |
-| [docs/backend-plan.md](docs/backend-plan.md) | Backend architecture, trust layer, 13 phases, solo timeline |
-| [docs/decisions.md](docs/decisions.md) | Decisions made and decisions still open |
+| [docs/backend-plan.md](docs/backend-plan.md)   | Backend architecture, trust layer, 13 phases, solo timeline      |
+| [docs/decisions.md](docs/decisions.md)         | Decisions made and decisions still open                          |
 
 The full versions, with architecture and roadmap drawings, live as documents in the Cairn project on claude.ai. The links are at the top of each plan file.
 
@@ -24,16 +24,32 @@ The full versions, with architecture and roadmap drawings, live as documents in 
 - **Web first.** An installable web app comes first; native apps come later.
 - **Quality gates.** A phase does not close until its gates pass in CI.
 
-## Repository layout (planned)
+## Getting started
+
+Needs Node 22 and pnpm 10.
+
+```
+pnpm install
+pnpm verify              # generated types, typecheck, lint, format, tests, build
+pnpm --filter @cairn/mock-server dev   # mock API on :4000
+pnpm --filter @cairn/api dev           # blank API on :4000
+pnpm --filter @cairn/web dev           # web shell on :3000
+```
+
+After editing `packages/contract/openapi/cairn.v1.yaml`, run `pnpm gen`. The conformance suite runs against both the mock and the real API.
+
+## Repository layout
 
 ```
 apps/web          Next.js frontend
 apps/api          TypeScript backend
-packages/contract OpenAPI spec, event schema, generated client
-packages/ui       Design system
-infra/            Infrastructure as code
+packages/contract OpenAPI spec, event schema, generated client, conformance suite
+packages/mock-server  Deterministic mock of the API
+packages/tokens   Design tokens from the logo
+packages/ui       Design system (Phase 1)
+infra/            Infrastructure as code (later)
 docs/             Plans and decision log
 assets/brand/     Logo and brand files
 ```
 
-Only `docs/` and `assets/` exist today.
+`apps/web`, `apps/api`, `packages/contract`, `packages/mock-server`, `packages/tokens`, `docs/` and `assets/` exist today.

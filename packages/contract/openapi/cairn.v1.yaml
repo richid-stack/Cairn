@@ -1,0 +1,576 @@
+openapi: 3.1.0
+info:
+  title: Cairn API
+  version: 0.1.0
+  summary: Contract v0 for the Cairn personal agent.
+  description: |
+    The source of truth for the REST API and the streaming event payloads.
+    The server, the mock server and the frontend client are all checked against this file.
+
+    Status: draft. Routes are added phase by phase; every route here has a conformance case.
+servers:
+  - url: http://localhost:4000
+    description: Local development (mock server or API)
+tags:
+  - name: system
+  - name: auth
+  - name: threads
+  - name: approvals
+  - name: models
+
+paths:
+  /v1/health:
+    get:
+      operationId: getHealth
+      tags: [system]
+      summary: Liveness and version
+      responses:
+        '200':
+          description: The service is up.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Health' }
+
+  /v1/auth/providers:
+    get:
+      operationId: listAuthProviders
+      tags: [auth]
+      summary: Sign-in methods this instance offers
+      description: |
+        Lets the sign-in screen show only what is enabled. A self-hosted instance
+        may offer a different set from the hosted one.
+      responses:
+        '200':
+          description: The enabled and available sign-in methods.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [providers]
+                properties:
+                  providers:
+                    type: array
+                    items: { $ref: '#/components/schemas/AuthProvider' }
+
+  /v1/model-providers:
+    get:
+      operationId: listModelProviders
+      tags: [models]
+      summary: Model providers a user can connect with their own key
+      responses:
+        '200':
+          description: The provider catalog.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [providers]
+                properties:
+                  providers:
+                    type: array
+                    items: { $ref: '#/components/schemas/ModelProvider' }
+
+  /v1/model-keys/{providerId}:
+    parameters:
+      - $ref: '#/components/parameters/ProviderId'
+    put:
+      operationId: putModelKey
+      tags: [models]
+      summary: Store the user's own API key for a provider
+      description: |
+        The key is encrypted at rest and is never returned by any route.
+        The response shows only the last four characters and the key's status.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [apiKey]
+              properties:
+                apiKey: { type: string, minLength: 8, writeOnly: true }
+                baseUrl:
+                  type: string
+                  format: uri
+                  description: Only for providers that run at a custom address.
+      responses:
+        '200':
+          description: The key is stored.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ModelKeyStatus' }
+        '404': { $ref: '#/components/responses/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+    delete:
+      operationId: deleteModelKey
+      tags: [models]
+      summary: Remove a stored key
+      responses:
+        '204':
+          description: The key is deleted.
+        '404': { $ref: '#/components/responses/Error' }
+
+  /v1/threads:
+    get:
+      operationId: listThreads
+      tags: [threads]
+      summary: List threads, newest first
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A page of threads.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, nextCursor]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Thread' }
+                  nextCursor: { type: [string, 'null'] }
+    post:
+      operationId: createThread
+      tags: [threads]
+      summary: Start a thread
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string, maxLength: 200 }
+      responses:
+        '201':
+          description: The new thread.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Thread' }
+
+  /v1/threads/{threadId}/messages:
+    parameters:
+      - $ref: '#/components/parameters/ThreadId'
+    get:
+      operationId: listMessages
+      tags: [threads]
+      summary: List messages in a thread, oldest first
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A page of messages.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, nextCursor]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Message' }
+                  nextCursor: { type: [string, 'null'] }
+        '404': { $ref: '#/components/responses/Error' }
+    post:
+      operationId: sendMessage
+      tags: [threads]
+      summary: Send a message and start an agent run
+      description: |
+        Returns at once with the saved message and the run id. The reply streams
+        on the thread's event stream. Sending the same Idempotency-Key again
+        returns the same result and never starts a second run.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text: { type: string, minLength: 1, maxLength: 20000 }
+      responses:
+        '202':
+          description: Accepted; the run has started.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [message, runId]
+                properties:
+                  message: { $ref: '#/components/schemas/Message' }
+                  runId: { type: string }
+        '404': { $ref: '#/components/responses/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+
+  /v1/threads/{threadId}/events:
+    parameters:
+      - $ref: '#/components/parameters/ThreadId'
+    get:
+      operationId: streamThreadEvents
+      tags: [threads]
+      summary: Server-sent event stream for a thread
+      description: |
+        Each event is one `data:` line holding an `Event` object, with the event id
+        in the `id:` field. A client that drops reconnects with `Last-Event-ID` and
+        receives only the events after it. The stream ends after `run.completed`,
+        `run.failed` or `run.cancelled` when no other run is active.
+      parameters:
+        - name: Last-Event-ID
+          in: header
+          required: false
+          schema: { type: string }
+      responses:
+        '200':
+          description: An event stream.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              x-event-schema:
+                $ref: '#/components/schemas/Event'
+        '404': { $ref: '#/components/responses/Error' }
+
+  /v1/approvals/{approvalId}/answer:
+    parameters:
+      - name: approvalId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: answerApproval
+      tags: [approvals]
+      summary: Answer an approval the agent asked for
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision: { type: string, enum: [approve, deny] }
+      responses:
+        '200':
+          description: The approval with its answer recorded.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Approval' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+
+components:
+  parameters:
+    ThreadId:
+      name: threadId
+      in: path
+      required: true
+      schema: { type: string }
+    ProviderId:
+      name: providerId
+      in: path
+      required: true
+      schema: { type: string }
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema: { type: string }
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: A unique value per intended action; a retry with the same value is safe.
+      schema: { type: string, minLength: 8, maxLength: 128 }
+
+  responses:
+    Error:
+      description: Something went wrong, with a stable code and a suggested fix.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  schemas:
+    Health:
+      type: object
+      required: [status, version, time]
+      properties:
+        status: { type: string, enum: [ok] }
+        version: { type: string }
+        time: { type: string, format: date-time }
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message, requestId]
+          properties:
+            code:
+              type: string
+              description: Stable, machine-readable, for example `not_found`.
+            message:
+              type: string
+              description: Plain language, safe to show to the user.
+            fix:
+              type: string
+              description: What the user can do next.
+            requestId: { type: string }
+
+    AuthProvider:
+      type: object
+      required: [id, name, kind]
+      properties:
+        id:
+          type: string
+          description: Stable id such as `google`, `microsoft`, `github`, `apple`, `email`, `passkey`, `sso`.
+        name: { type: string }
+        kind:
+          type: string
+          enum: [oauth, oidc, saml, email, passkey]
+        brandIcon:
+          type: string
+          description: Key of the official icon in the brand icon set; absent for generic methods.
+
+    ModelProvider:
+      type: object
+      required: [id, name, kind, requiresKey, capabilities]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        kind:
+          type: string
+          enum: [hosted, gateway, local]
+        requiresKey: { type: boolean }
+        allowsCustomBaseUrl: { type: boolean }
+        brandIcon: { type: string }
+        capabilities:
+          type: array
+          items:
+            type: string
+            enum: [text, tools, vision, audio, embeddings]
+
+    ModelKeyStatus:
+      type: object
+      required: [providerId, last4, status, updatedAt]
+      properties:
+        providerId: { type: string }
+        last4: { type: string, maxLength: 4 }
+        status:
+          type: string
+          enum: [unchecked, valid, invalid, revoked]
+        updatedAt: { type: string, format: date-time }
+
+    Thread:
+      type: object
+      required: [id, title, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    Message:
+      type: object
+      required: [id, threadId, role, text, createdAt]
+      properties:
+        id: { type: string }
+        threadId: { type: string }
+        role: { type: string, enum: [user, agent] }
+        text: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    Approval:
+      type: object
+      required: [id, runId, summary, risk, status]
+      properties:
+        id: { type: string }
+        runId: { type: string }
+        summary:
+          type: string
+          description: Plain words for what will happen, to whom, with what data.
+        risk:
+          type: integer
+          minimum: 0
+          maximum: 4
+          description: Risk tier from the trust layer.
+        status: { type: string, enum: [pending, approved, denied, expired] }
+        answeredAt: { type: [string, 'null'], format: date-time }
+
+    Step:
+      type: object
+      required: [id, kind, title, status]
+      properties:
+        id: { type: string }
+        kind: { type: string, enum: [model, tool] }
+        title: { type: string }
+        status: { type: string, enum: [running, succeeded, failed] }
+
+    EventBase:
+      type: object
+      required: [id, type, threadId, at, data]
+      properties:
+        id:
+          type: string
+          description: Increasing within a thread; used as Last-Event-ID.
+        threadId: { type: string }
+        at: { type: string, format: date-time }
+
+    Event:
+      description: Everything the stream can carry. More event types arrive with later phases.
+      oneOf:
+        - { $ref: '#/components/schemas/MessageDeltaEvent' }
+        - { $ref: '#/components/schemas/MessageCompleteEvent' }
+        - { $ref: '#/components/schemas/RunStartedEvent' }
+        - { $ref: '#/components/schemas/RunStepEvent' }
+        - { $ref: '#/components/schemas/StatusUpdateEvent' }
+        - { $ref: '#/components/schemas/RunWaitingApprovalEvent' }
+        - { $ref: '#/components/schemas/RunResumedEvent' }
+        - { $ref: '#/components/schemas/RunCompletedEvent' }
+        - { $ref: '#/components/schemas/RunFailedEvent' }
+        - { $ref: '#/components/schemas/RunCancelledEvent' }
+      discriminator:
+        propertyName: type
+        mapping:
+          message.delta: '#/components/schemas/MessageDeltaEvent'
+          message.complete: '#/components/schemas/MessageCompleteEvent'
+          run.started: '#/components/schemas/RunStartedEvent'
+          run.step: '#/components/schemas/RunStepEvent'
+          status.update: '#/components/schemas/StatusUpdateEvent'
+          run.waiting_approval: '#/components/schemas/RunWaitingApprovalEvent'
+          run.resumed: '#/components/schemas/RunResumedEvent'
+          run.completed: '#/components/schemas/RunCompletedEvent'
+          run.failed: '#/components/schemas/RunFailedEvent'
+          run.cancelled: '#/components/schemas/RunCancelledEvent'
+
+    MessageDeltaEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: message.delta }
+            data:
+              type: object
+              required: [messageId, text]
+              properties:
+                messageId: { type: string }
+                text: { type: string }
+    MessageCompleteEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: message.complete }
+            data:
+              type: object
+              required: [message]
+              properties:
+                message: { $ref: '#/components/schemas/Message' }
+    RunStartedEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: run.started }
+            data:
+              type: object
+              required: [runId]
+              properties:
+                runId: { type: string }
+    RunStepEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: run.step }
+            data:
+              type: object
+              required: [runId, step]
+              properties:
+                runId: { type: string }
+                step: { $ref: '#/components/schemas/Step' }
+    StatusUpdateEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: status.update }
+            data:
+              type: object
+              required: [runId, text]
+              properties:
+                runId: { type: string }
+                text: { type: string }
+    RunWaitingApprovalEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: run.waiting_approval }
+            data:
+              type: object
+              required: [runId, approval]
+              properties:
+                runId: { type: string }
+                approval: { $ref: '#/components/schemas/Approval' }
+    RunResumedEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: run.resumed }
+            data:
+              type: object
+              required: [runId]
+              properties:
+                runId: { type: string }
+    RunCompletedEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: run.completed }
+            data:
+              type: object
+              required: [runId]
+              properties:
+                runId: { type: string }
+    RunFailedEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: run.failed }
+            data:
+              type: object
+              required: [runId, message]
+              properties:
+                runId: { type: string }
+                message: { type: string }
+                fix: { type: string }
+    RunCancelledEvent:
+      allOf:
+        - $ref: '#/components/schemas/EventBase'
+        - type: object
+          properties:
+            type: { const: run.cancelled }
+            data:
+              type: object
+              required: [runId]
+              properties:
+                runId: { type: string }

@@ -48,3 +48,4 @@ Stripe's own country list should be checked directly. A Ghana-registered busines
 | Data region, retention  | Where data lives and how long it is kept                                                                                                                                   | Before beta                                            |
 | Legal review            | A lawyer reads `LICENSING.md`, `CLA.md` (including the open-source commitment in section 4, which can be removed) and `TRADEMARKS.md`. Trademark registration for the name | Before the first outside contribution, and before beta |
 | Extra help              | Hire or contract an engineer, and from when                                                                                                                                | Month 6 review                                         |
+

@@ -4,7 +4,7 @@
 
 Cairn is a personal-agent app that handles errands, money and scheduling, and asks before it acts. A cairn marks a path; Cairn's agent shows where it has been and asks before it goes further.
 
-**Status:** Phase 1, design system, in progress. The workspace, contract, mock server, blank API, design tokens, a first set of accessible components (button, text field, checkbox, switch, dialog) and a web shell with light, dark and high-contrast themes exist. Nothing is deployed yet.
+**Status:** Phase 1, design system, in progress. The workspace, contract, mock server, blank API, design tokens, a first set of accessible components (button, text field, select, checkbox, switch, dialog, menu, toast) and a web shell with light, dark and high-contrast themes exist. Nothing is deployed yet.
 
 ## Plans
 

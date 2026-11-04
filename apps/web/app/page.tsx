@@ -1,6 +1,7 @@
 import { dark, light } from '@cairn/tokens';
-import { Button, Checkbox, Switch, TextField, type ButtonVariant } from '@cairn/ui';
+import { Button, Checkbox, Select, Switch, TextField, type ButtonVariant } from '@cairn/ui';
 import { DialogDemo } from './dialog-demo';
+import { OverlayDemo } from './overlay-demo';
 import { ThemeSwitcher } from './theme-switcher';
 
 const shown = ['bg', 'surface', 'text', 'textMuted', 'accent', 'accentSoft'] as const;
@@ -67,6 +68,16 @@ export default function Home() {
         </div>
       </section>
       <section>
+        <h2>Select</h2>
+        <div className="stack">
+          <Select label="Country" hint="Sets your currency and payment options.">
+            <option value="gh">Ghana</option>
+            <option value="ke">Kenya</option>
+            <option value="ng">Nigeria</option>
+          </Select>
+        </div>
+      </section>
+      <section>
         <h2>Choices</h2>
         <div className="stack">
           <Checkbox label="Ask before spending" hint="Applies to every connector." defaultChecked />
@@ -79,6 +90,10 @@ export default function Home() {
       <section>
         <h2>Dialog</h2>
         <DialogDemo />
+      </section>
+      <section>
+        <h2>Menu and toasts</h2>
+        <OverlayDemo />
       </section>
     </main>
   );

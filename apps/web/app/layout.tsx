@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
-import { themeInitScript } from '@cairn/ui';
+import { ToastProvider, themeInitScript } from '@cairn/ui';
 import '@cairn/tokens/tokens.css';
 import '@cairn/ui/ui.css';
 import './globals.css';
@@ -21,7 +21,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <ToastProvider>{children}</ToastProvider>
+      </body>
     </html>
   );
 }

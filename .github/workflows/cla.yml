@@ -32,5 +32,5 @@ jobs:
           path-to-signatures: signatures/v1/cla.json
           path-to-document: https://github.com/richid-stack/Cairn/blob/main/CLA.md
           branch: cla-signatures
-          allowlist: richid-stack,dependabot[bot],github-actions[bot]
+          allowlist: richid-stack,claude,dependabot[bot],github-actions[bot]
           custom-pr-sign-comment: 'I have read the CLA and I agree to it.'

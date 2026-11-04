@@ -337,7 +337,7 @@
 }
 
 .cairn-dialog[open] {
-  animation: cairn-dialog-in var(--cairn-duration-quick) var(--cairn-ease);
+  animation: cairn-dialog-in var(--cairn-duration-quick) var(--cairn-ease-enter);
 }
 
 @keyframes cairn-dialog-in {
@@ -497,7 +497,7 @@
   color: var(--cairn-color-text);
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
   pointer-events: auto;
-  animation: cairn-toast-in var(--cairn-duration-quick) var(--cairn-ease);
+  animation: cairn-toast-in var(--cairn-duration-quick) var(--cairn-ease-enter);
 }
 
 .cairn-toast[data-tone='success'] {
@@ -527,5 +527,54 @@
 @media (prefers-reduced-motion: reduce) {
   .cairn-toast {
     animation: none;
+  }
+}
+
+.cairn-toast-icon {
+  flex: none;
+}
+.cairn-toast[data-tone='success'] .cairn-toast-icon {
+  color: var(--cairn-color-success);
+}
+.cairn-toast[data-tone='danger'] .cairn-toast-icon {
+  color: var(--cairn-color-danger);
+}
+.cairn-toast[data-tone='info'] .cairn-toast-icon {
+  color: var(--cairn-color-accent);
+}
+
+/* Skeleton: a soft sweep says "on its way". Reduced motion gets a still block. */
+.cairn-skeleton {
+  display: block;
+  border-radius: var(--cairn-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--cairn-color-surface) 0%,
+    var(--cairn-color-border) 50%,
+    var(--cairn-color-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: cairn-skeleton-sweep 1400ms linear infinite;
+}
+
+.cairn-skeleton-text,
+.cairn-skeleton-group {
+  display: grid;
+  gap: var(--cairn-space-2);
+}
+
+@keyframes cairn-skeleton-sweep {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cairn-skeleton {
+    animation: none;
+    background: var(--cairn-color-border);
   }
 }

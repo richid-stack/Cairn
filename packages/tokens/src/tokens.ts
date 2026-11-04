@@ -133,5 +133,10 @@ export const motion = {
   quick: 160,
   base: 240,
   slow: 360,
+  /** Movement within the screen. */
   ease: 'cubic-bezier(0.2, 0, 0, 1)',
+  /** Things arriving: fast start, soft landing. */
+  easeEnter: 'cubic-bezier(0, 0, 0.2, 1)',
+  /** Things leaving: gentle start, quick finish. */
+  easeExit: 'cubic-bezier(0.4, 0, 1, 1)',
 } as const;

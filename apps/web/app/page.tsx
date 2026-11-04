@@ -1,5 +1,17 @@
 import { dark, light } from '@cairn/tokens';
-import { Button, Checkbox, Select, Switch, TextField, type ButtonVariant } from '@cairn/ui';
+import {
+  Button,
+  Checkbox,
+  Icon,
+  Select,
+  SkeletonGroup,
+  SkeletonText,
+  Skeleton,
+  Switch,
+  TextField,
+  iconNames,
+  type ButtonVariant,
+} from '@cairn/ui';
 import { DialogDemo } from './dialog-demo';
 import { OverlayDemo } from './overlay-demo';
 import { ThemeSwitcher } from './theme-switcher';
@@ -90,6 +102,28 @@ export default function Home() {
       <section>
         <h2>Dialog</h2>
         <DialogDemo />
+      </section>
+      <section>
+        <h2>Icons</h2>
+        <ul className="icon-grid">
+          {iconNames.map((name) => (
+            <li key={name}>
+              <Icon name={name} size="lg" />
+              <span>{name}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <h2>Loading</h2>
+        <SkeletonGroup label="Loading messages">
+          <div className="row">
+            <Skeleton width={40} height={40} radius="999px" />
+            <div className="skeleton-line">
+              <SkeletonText lines={3} />
+            </div>
+          </div>
+        </SkeletonGroup>
       </section>
       <section>
         <h2>Menu and toasts</h2>

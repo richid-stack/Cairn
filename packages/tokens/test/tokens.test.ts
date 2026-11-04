@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { contrast } from '../src/contrast.js';
 import { buildCss } from '../src/css.js';
-import { brand, dark, highContrast, light, type Palette } from '../src/tokens.js';
+import { brand, dark, highContrast, light, motion, type Palette } from '../src/tokens.js';
 
 const themes: [string, Palette][] = [
   ['light', light],
@@ -104,5 +104,31 @@ describe('css output', () => {
     const matches = css.match(/--cairn-color-bg:/g) ?? [];
     expect(matches.length).toBe(5);
     expect((css.match(/--cairn-color-/g) ?? []).length).toBe(count * 5);
+  });
+});
+
+describe('motion', () => {
+  const css = buildCss();
+  const reduced = css.slice(css.indexOf('@media (prefers-reduced-motion: reduce)'));
+
+  it('has durations that grow, with instant under 100 ms and nothing over 400 ms', () => {
+    expect(motion.instant).toBeLessThan(100);
+    expect(motion.instant).toBeLessThan(motion.quick);
+    expect(motion.quick).toBeLessThan(motion.base);
+    expect(motion.base).toBeLessThan(motion.slow);
+    expect(motion.slow).toBeLessThanOrEqual(400);
+  });
+
+  it('collapses every duration token under reduced motion', () => {
+    const names = [...css.matchAll(/--cairn-duration-([a-z]+):/g)].map((m) => m[1]);
+    expect(new Set(names).size).toBeGreaterThanOrEqual(4);
+    for (const name of new Set(names)) {
+      expect(reduced).toContain(`--cairn-duration-${name}: 1ms;`);
+    }
+  });
+
+  it('defines enter and exit easing', () => {
+    expect(css).toContain('--cairn-ease-enter:');
+    expect(css).toContain('--cairn-ease-exit:');
   });
 });

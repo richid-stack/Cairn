@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Button } from './button';
+import { Icon, type IconName } from './icon';
 import { VisuallyHidden } from './visually-hidden';
 
 export type ToastTone = 'info' | 'success' | 'danger';
@@ -42,6 +43,7 @@ export function useToast(): ToastApi {
   return api;
 }
 
+const toneIcon: Record<ToastTone, IconName> = { info: 'info', success: 'success', danger: 'error' };
 const toneWord: Record<ToastTone, string> = { info: 'Note', success: 'Done', danger: 'Problem' };
 
 export function ToastProvider({ children }: { children: ReactNode }) {
@@ -106,6 +108,7 @@ function ToastItem({ toast, onDismiss }: { toast: ToastEntry; onDismiss: (id: nu
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
+      <Icon name={toneIcon[tone]} className="cairn-toast-icon" />
       <p className="cairn-toast-message">
         <VisuallyHidden>{toneWord[tone]}: </VisuallyHidden>
         {toast.message}
@@ -123,7 +126,7 @@ function ToastItem({ toast, onDismiss }: { toast: ToastEntry; onDismiss: (id: nu
         </Button>
       ) : null}
       <Button size="sm" variant="ghost" aria-label="Dismiss" onClick={() => onDismiss(toast.id)}>
-        ×
+        <Icon name="close" size="sm" />
       </Button>
     </div>
   );

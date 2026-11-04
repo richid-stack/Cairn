@@ -16,3 +16,5 @@ export {
 export { Select, type SelectProps } from './select';
 export { Menu, type MenuItem, type MenuProps } from './menu';
 export { ToastProvider, useToast, type ToastInput, type ToastTone } from './toast';
+export { Icon, iconNames, type IconName, type IconProps, type IconSize } from './icon';
+export { Skeleton, SkeletonGroup, SkeletonText, type SkeletonProps } from './skeleton';

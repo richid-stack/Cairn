@@ -124,3 +124,31 @@ section {
   gap: var(--cairn-space-4);
   max-width: 28rem;
 }
+
+.icon-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: var(--cairn-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icon-grid li {
+  display: grid;
+  justify-items: center;
+  gap: var(--cairn-space-1);
+  padding: var(--cairn-space-3) var(--cairn-space-2);
+  border: 1px solid var(--cairn-color-border);
+  border-radius: var(--cairn-radius-md);
+  background: var(--cairn-color-surface);
+  font-size: var(--cairn-text-xs);
+  color: var(--cairn-color-text-muted);
+}
+
+.skeleton-line {
+  flex: 1;
+  min-width: 12rem;
+  max-width: 28rem;
+}

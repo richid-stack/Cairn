@@ -20,6 +20,10 @@ Third-party brand icons (connectors, sign-in methods, model providers) belong to
 
 Contributors sign the [CLA](CLA.md) before a change is merged. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Third-party code
+
+Cairn depends on open-source packages, each under its own license. The icons in the interface come from [Lucide](https://lucide.dev) (`lucide-react`, ISC license), reached only through Cairn's own `Icon` component. The ISC license requires its copyright notice to stay with copies, and the package carries it. Run `pnpm licenses list` for the full list. Before the first release, add an automatic check that no dependency has a license that conflicts with AGPL-3.0 or Apache-2.0.
+
 ## Source of the license texts
 
 The license files are the official texts from the [SPDX license list](https://github.com/spdx/license-list-data). This file is a plain-language map, not legal advice. Get a lawyer to review the licensing and the CLA before the first outside contribution.

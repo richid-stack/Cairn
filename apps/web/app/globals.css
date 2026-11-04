@@ -118,3 +118,9 @@ section {
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   justify-self: stretch;
 }
+
+.stack {
+  display: grid;
+  gap: var(--cairn-space-4);
+  max-width: 28rem;
+}

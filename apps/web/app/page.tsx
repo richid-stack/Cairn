@@ -1,5 +1,6 @@
 import { dark, light } from '@cairn/tokens';
-import { Button, TextField, type ButtonVariant } from '@cairn/ui';
+import { Button, Checkbox, Switch, TextField, type ButtonVariant } from '@cairn/ui';
+import { DialogDemo } from './dialog-demo';
 import { ThemeSwitcher } from './theme-switcher';
 
 const shown = ['bg', 'surface', 'text', 'textMuted', 'accent', 'accentSoft'] as const;
@@ -64,6 +65,20 @@ export default function Home() {
             defaultValue="ada@"
           />
         </div>
+      </section>
+      <section>
+        <h2>Choices</h2>
+        <div className="stack">
+          <Checkbox label="Ask before spending" hint="Applies to every connector." defaultChecked />
+          <Checkbox label="All connectors" indeterminate />
+          <Checkbox label="Share usage data" error="Choose yes or no to continue." />
+          <Switch label="Daily summary" hint="Sent at 8:00, your time." defaultChecked />
+          <Switch label="Quiet hours" />
+        </div>
+      </section>
+      <section>
+        <h2>Dialog</h2>
+        <DialogDemo />
       </section>
     </main>
   );

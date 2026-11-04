@@ -1,42 +1,26 @@
 'use client';
 
-import { Button } from '@cairn/ui';
+import { Button, readStoredTheme, themes, themeStorageKey, type ThemeId } from '@cairn/ui';
 import { useEffect, useState } from 'react';
-
-const themes = [
-  { id: 'system', label: 'System' },
-  { id: 'light', label: 'Light' },
-  { id: 'dark', label: 'Dark' },
-  { id: 'high-contrast', label: 'High contrast' },
-] as const;
-
-type ThemeId = (typeof themes)[number]['id'];
-const storageKey = 'cairn-theme';
-
-function readStored(): ThemeId {
-  try {
-    const value = window.localStorage.getItem(storageKey);
-    return themes.some((t) => t.id === value) ? (value as ThemeId) : 'system';
-  } catch {
-    return 'system';
-  }
-}
 
 export function ThemeSwitcher() {
   const [theme, setTheme] = useState<ThemeId>('system');
 
-  useEffect(() => setTheme(readStored()), []);
+  // Only reads here. The head script has already applied the saved theme, so writing
+  // on mount would undo it and bring the flash back.
+  useEffect(() => setTheme(readStoredTheme(window.localStorage)), []);
 
-  useEffect(() => {
+  function choose(next: ThemeId) {
+    setTheme(next);
     const root = document.documentElement;
-    if (theme === 'system') root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', theme);
+    if (next === 'system') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', next);
     try {
-      window.localStorage.setItem(storageKey, theme);
+      window.localStorage.setItem(themeStorageKey, next);
     } catch {
       // Storage can be blocked; the choice then lasts only for this visit.
     }
-  }, [theme]);
+  }
 
   return (
     <div role="group" aria-label="Theme" className="row">
@@ -46,7 +30,7 @@ export function ThemeSwitcher() {
           size="sm"
           variant={theme === t.id ? 'primary' : 'secondary'}
           aria-pressed={theme === t.id}
-          onClick={() => setTheme(t.id)}
+          onClick={() => choose(t.id)}
         >
           {t.label}
         </Button>

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+import { themeInitScript } from '@cairn/ui';
 import '@cairn/tokens/tokens.css';
 import '@cairn/ui/ui.css';
 import './globals.css';
@@ -15,7 +16,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    // The inline script sets data-theme before first paint, so React must not flag the difference.
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );

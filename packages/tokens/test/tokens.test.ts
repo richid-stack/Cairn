@@ -35,6 +35,11 @@ describe.each(themes)('%s theme contrast', (_name, p) => {
     expect(contrast(p.borderStrong, p.bg)).toBeGreaterThanOrEqual(1.4);
   });
 
+  it('form control outlines reach 3:1 against the page and the surface (WCAG 1.4.11)', () => {
+    expect(contrast(p.control, p.bg)).toBeGreaterThanOrEqual(3);
+    expect(contrast(p.control, p.surface)).toBeGreaterThanOrEqual(3);
+  });
+
   it('the focus ring stands out from the page and the surface (3:1)', () => {
     expect(contrast(p.focus, p.bg)).toBeGreaterThanOrEqual(3);
     expect(contrast(p.focus, p.surface)).toBeGreaterThanOrEqual(3);

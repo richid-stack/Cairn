@@ -17,6 +17,8 @@ export interface Palette {
   surface: string;
   border: string;
   borderStrong: string;
+  /** Outline of form controls (inputs, checkboxes, switches). At least 3:1 against the page. */
+  control: string;
   focus: string;
   text: string;
   textMuted: string;
@@ -35,6 +37,7 @@ export const light: Palette = {
   surface: '#F6F7F9',
   border: '#E3E5EA',
   borderStrong: '#C9CDD6',
+  control: '#767C8A',
   focus: '#2745C8',
   text: brand.ink,
   textMuted: '#4A4F5C',
@@ -53,6 +56,7 @@ export const dark: Palette = {
   surface: '#14161A',
   border: '#272A31',
   borderStrong: '#3A3E48',
+  control: '#7A808E',
   focus: '#A5B8FF',
   text: '#F4F5F7',
   textMuted: '#B6BAC5',
@@ -76,6 +80,7 @@ export const highContrast: Palette = {
   surface: '#0A0A0A',
   border: '#9A9A9A',
   borderStrong: '#FFFFFF',
+  control: '#FFFFFF',
   focus: '#FFE14D',
   text: '#FFFFFF',
   textMuted: '#E6E6E6',

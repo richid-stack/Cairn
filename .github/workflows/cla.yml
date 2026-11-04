@@ -1,7 +1,7 @@
 name: CLA
 
-# Off until the repository variable CLA_ENABLED is set to "true". Switch it on after the owner's
-# legal name is filled in CLA.md and the text has had a legal review. See docs/decisions.md.
+# Off until the repository variable CLA_ENABLED is set to "true". The owner's name is in CLA.md;
+# switch it on once the text has had a legal review. See docs/decisions.md.
 
 on:
   issue_comment:

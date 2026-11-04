@@ -18,4 +18,4 @@ The open-source licenses on this repository cover the code. They do not give any
 
 A fork is welcome. It just needs its own name and logo, so users can tell the two apart.
 
-The owner has not yet registered the mark. Registration, and the owner's legal name for this document, are recorded as open items in [docs/decisions.md](docs/decisions.md). Get qualified advice before relying on this policy.
+The owner of the Cairn name and brand assets is Richard Mensah. The mark is not yet registered; registration is an open item in [docs/decisions.md](docs/decisions.md). Get qualified advice before relying on this policy.

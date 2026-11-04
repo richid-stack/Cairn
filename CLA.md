@@ -4,7 +4,7 @@ Version 1, draft pending legal review.
 
 This agreement is between you ("You") and the Cairn project owner named below ("Owner"). It covers every contribution You send to the Cairn project.
 
-**Owner:** [LEGAL NAME OF THE OWNER, TO BE FILLED IN BEFORE THE CLA IS SWITCHED ON]
+**Owner:** Richard Mensah
 
 You keep the copyright in Your contributions. This agreement gives the Owner the permissions below so the project can be distributed and, if needed, licensed on other terms.
 

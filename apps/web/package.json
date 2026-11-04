@@ -12,6 +12,7 @@
   "dependencies": {
     "@cairn/contract": "workspace:*",
     "@cairn/tokens": "workspace:*",
+    "@cairn/ui": "workspace:*",
     "next": "^16.4.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

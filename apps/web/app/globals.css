@@ -104,3 +104,17 @@ section {
 .swatches {
   justify-self: stretch;
 }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cairn-space-3);
+  align-items: center;
+}
+
+.fields {
+  display: grid;
+  gap: var(--cairn-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  justify-self: stretch;
+}

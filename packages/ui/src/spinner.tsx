@@ -1,0 +1,17 @@
+import type { ComponentProps } from 'react';
+import { cx } from './cx';
+import { VisuallyHidden } from './visually-hidden';
+
+export interface SpinnerProps extends ComponentProps<'span'> {
+  /** What is loading, announced to screen readers. */
+  label?: string;
+}
+
+export function Spinner({ label = 'Loading', className, ...props }: SpinnerProps) {
+  return (
+    <span role="status" className={cx('cairn-spinner', className)} {...props}>
+      <span className="cairn-spinner-ring" aria-hidden="true" />
+      <VisuallyHidden>{label}</VisuallyHidden>
+    </span>
+  );
+}

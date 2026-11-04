@@ -1,4 +1,14 @@
-import { dark, font, light, motion, radius, space, type, type Palette } from './tokens.js';
+import {
+  dark,
+  font,
+  highContrast,
+  light,
+  motion,
+  radius,
+  space,
+  type,
+  type Palette,
+} from './tokens.js';
 
 const kebab = (key: string) => key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
@@ -41,6 +51,18 @@ ${colorVars(dark, '    ')}
 
 :root[data-theme='dark'] {
 ${colorVars(dark, '  ')}
+}
+
+@media (prefers-contrast: more) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+${colorVars(highContrast, '    ')}
+  }
+}
+
+:root[data-theme='high-contrast'] {
+  color-scheme: dark;
+${colorVars(highContrast, '  ')}
 }
 
 @media (prefers-reduced-motion: reduce) {

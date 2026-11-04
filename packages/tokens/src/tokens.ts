@@ -17,6 +17,7 @@ export interface Palette {
   surface: string;
   border: string;
   borderStrong: string;
+  focus: string;
   text: string;
   textMuted: string;
   textSubtle: string;
@@ -34,6 +35,7 @@ export const light: Palette = {
   surface: '#F6F7F9',
   border: '#E3E5EA',
   borderStrong: '#C9CDD6',
+  focus: '#2745C8',
   text: brand.ink,
   textMuted: '#4A4F5C',
   textSubtle: '#656A78',
@@ -51,6 +53,7 @@ export const dark: Palette = {
   surface: '#14161A',
   border: '#272A31',
   borderStrong: '#3A3E48',
+  focus: '#A5B8FF',
   text: '#F4F5F7',
   textMuted: '#B6BAC5',
   textSubtle: '#8E93A1',
@@ -61,6 +64,29 @@ export const dark: Palette = {
   success: '#4CC38A',
   warning: '#E2B24C',
   danger: '#FF7B86',
+};
+
+/**
+ * High contrast: every text role reaches 7:1, borders reach 3:1, and the focus ring is a
+ * color that stands out from both the page and the accent. Used when the user picks it, and
+ * automatically when the system asks for more contrast.
+ */
+export const highContrast: Palette = {
+  bg: '#000000',
+  surface: '#0A0A0A',
+  border: '#9A9A9A',
+  borderStrong: '#FFFFFF',
+  focus: '#FFE14D',
+  text: '#FFFFFF',
+  textMuted: '#E6E6E6',
+  textSubtle: '#CFCFCF',
+  accent: '#7FB0FF',
+  accentHover: '#A9C9FF',
+  onAccent: '#000000',
+  accentSoft: '#10233F',
+  success: '#5CE59A',
+  warning: '#FFD166',
+  danger: '#FF8A8A',
 };
 
 /** px values; the CSS output converts them. */

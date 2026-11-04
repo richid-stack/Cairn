@@ -1,6 +1,9 @@
 import { dark, light } from '@cairn/tokens';
+import { Button, TextField, type ButtonVariant } from '@cairn/ui';
+import { ThemeSwitcher } from './theme-switcher';
 
 const shown = ['bg', 'surface', 'text', 'textMuted', 'accent', 'accentSoft'] as const;
+const variants: ButtonVariant[] = ['primary', 'secondary', 'ghost', 'danger'];
 const cssName = (key: string) => key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
 export default function Home() {
@@ -32,6 +35,35 @@ export default function Home() {
             </li>
           ))}
         </ul>
+      </section>
+      <section>
+        <h2>Theme</h2>
+        <ThemeSwitcher />
+      </section>
+      <section>
+        <h2>Buttons</h2>
+        {variants.map((variant) => (
+          <div className="row" key={variant}>
+            <Button variant={variant}>{variant}</Button>
+            <Button variant={variant} disabled>
+              Disabled
+            </Button>
+            <Button variant={variant} loading>
+              Loading
+            </Button>
+          </div>
+        ))}
+      </section>
+      <section>
+        <h2>Text fields</h2>
+        <div className="fields">
+          <TextField label="Email" hint="We send a sign-in code." placeholder="you@example.com" />
+          <TextField
+            label="Email"
+            error="That address is not valid. Check for typos."
+            defaultValue="ada@"
+          />
+        </div>
       </section>
     </main>
   );

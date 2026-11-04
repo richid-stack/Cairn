@@ -2,6 +2,7 @@
   "name": "@cairn/mock-server",
   "version": "0.0.0",
   "private": true,
+  "license": "Apache-2.0",
   "type": "module",
   "description": "A deterministic mock of the Cairn API so the frontend can be built before the backend exists",
   "exports": {

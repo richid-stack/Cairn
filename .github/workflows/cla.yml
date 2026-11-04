@@ -1,0 +1,36 @@
+name: CLA
+
+# Off until the repository variable CLA_ENABLED is set to "true". Switch it on after the owner's
+# legal name is filled in CLA.md and the text has had a legal review. See docs/decisions.md.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_target:
+    types: [opened, closed, synchronize]
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+  statuses: write
+
+jobs:
+  cla:
+    if: >-
+      vars.CLA_ENABLED == 'true' &&
+      (github.event_name == 'pull_request_target' ||
+      github.event.comment.body == 'recheck' ||
+      github.event.comment.body == 'I have read the CLA and I agree to it.')
+    runs-on: ubuntu-latest
+    steps:
+      # Pinned to the v2.6.1 commit. This action never checks out the pull request's code.
+      - uses: contributor-assistant/github-action@ca4a40a7d1004f18d9960b404b97e5f30a505a08
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path-to-signatures: signatures/v1/cla.json
+          path-to-document: https://github.com/richid-stack/Cairn/blob/main/CLA.md
+          branch: cla-signatures
+          allowlist: richid-stack,dependabot[bot],github-actions[bot]
+          custom-pr-sign-comment: 'I have read the CLA and I agree to it.'

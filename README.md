@@ -4,7 +4,7 @@
 
 Cairn is a personal-agent app that handles errands, money and scheduling, and asks before it acts. A cairn marks a path; Cairn's agent shows where it has been and asks before it goes further.
 
-**Status:** Phase 0, foundations. The workspace, contract, mock server, blank API, design tokens and a blank web shell exist. Nothing is deployed yet.
+**Status:** Phase 1, design system, in progress. The workspace, contract, mock server, blank API, design tokens, a first set of accessible components (button, text field, checkbox, switch, dialog) and a web shell with light, dark and high-contrast themes exist. Nothing is deployed yet.
 
 ## Plans
 
@@ -46,10 +46,14 @@ apps/api          TypeScript backend
 packages/contract OpenAPI spec, event schema, generated client, conformance suite
 packages/mock-server  Deterministic mock of the API
 packages/tokens   Design tokens from the logo
-packages/ui       Design system (Phase 1)
+packages/ui       Design system components
 infra/            Infrastructure as code (later)
 docs/             Plans and decision log
 assets/brand/     Logo and brand files
 ```
 
-`apps/web`, `apps/api`, `packages/contract`, `packages/mock-server`, `packages/tokens`, `docs/` and `assets/` exist today.
+`apps/web`, `apps/api`, `packages/*`, `docs/` and `assets/` exist today.
+
+## License
+
+AGPL-3.0-only for the apps, design tokens and UI; Apache-2.0 for the API contract and mock server. The Cairn name and logo are not covered by either license. See [LICENSING.md](LICENSING.md), [TRADEMARKS.md](TRADEMARKS.md) and [CONTRIBUTING.md](CONTRIBUTING.md). Contributors sign the [CLA](CLA.md).

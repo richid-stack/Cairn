@@ -2,6 +2,7 @@
   "name": "@cairn/contract",
   "version": "0.0.0",
   "private": true,
+  "license": "Apache-2.0",
   "type": "module",
   "description": "OpenAPI spec, streaming event schema, generated types, client, conformance suite and analytics taxonomy",
   "exports": {

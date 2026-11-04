@@ -2,6 +2,7 @@
   "name": "@cairn/web",
   "version": "0.0.0",
   "private": true,
+  "license": "AGPL-3.0-only",
   "description": "The Cairn web app. Phase 0: a blank, deployable shell that shows the brand tokens.",
   "scripts": {
     "dev": "next dev -p 3000",

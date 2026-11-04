@@ -31,3 +31,52 @@ jobs:
       - run: pnpm format:check
       - run: pnpm test
       - run: pnpm build
+
+  # Deploys the API to Google Cloud Run after CI passes on main.
+  # Skipped until the repository variables in docs/deploy-cloud-run.md are set.
+  deploy-api:
+    needs: verify
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.GCP_PROJECT_ID != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      REGION: ${{ vars.GCP_REGION }}
+      IMAGE: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cairn/api:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Build and push the image
+        run: |
+          gcloud auth configure-docker "$REGION-docker.pkg.dev" --quiet
+          docker build -f apps/api/Dockerfile -t "$IMAGE" .
+          docker push "$IMAGE"
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: cairn-api
+          region: ${{ vars.GCP_REGION }}
+          image: ${{ env.IMAGE }}
+          env_vars: APP_VERSION=${{ github.sha }}
+          flags: >-
+            --allow-unauthenticated
+            --port=8080
+            --cpu=1
+            --memory=512Mi
+            --min-instances=0
+            --max-instances=2
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Smoke test the deployed API against the contract
+        run: pnpm --filter @cairn/api smoke "${{ steps.deploy.outputs.url }}"

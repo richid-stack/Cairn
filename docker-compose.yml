@@ -1,0 +1,50 @@
+# Local and self-hosted setup.
+#   docker compose up --build          # the API on http://localhost:4000
+#   docker compose --profile data up   # also start Postgres and Redis (used from Phase B1)
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      PORT: '4000'
+      AUTH_PROVIDERS: ${AUTH_PROVIDERS:-}
+    ports:
+      - '4000:4000'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:4000/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+
+  postgres:
+    profiles: [data]
+    image: postgres:17
+    environment:
+      POSTGRES_USER: cairn
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cairn-local-only}
+      POSTGRES_DB: cairn
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U cairn']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    profiles: [data]
+    image: redis:7
+    ports:
+      - '6379:6379'
+
+volumes:
+  pgdata:

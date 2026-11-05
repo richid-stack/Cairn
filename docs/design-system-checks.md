@@ -26,7 +26,7 @@ Playwright's default comparison ignores anti-aliased edge pixels. A test showed 
 
 ## Known limits
 
-- Baselines were first made on one machine. If GitHub's machines render slightly differently, the check needs its baselines regenerated there.
+- Baselines were made on the development machine and matched on GitHub's machines on the first run (2026-11-05). A different Chromium or font version could change that; if the check fails with no visible difference, regenerate the baselines in CI and compare.
 - Only static states are captured. A menu is captured open, but a hover state or a focus ring on a specific element is not yet. Add a story with a `play` step for each.
 - Storybook's own component documentation pages and interaction testing are not set up. The accessibility add-on shows results in the Storybook panel while developing.
 - Only Chromium is checked. Safari and Firefox come with the Playwright end-to-end tests in a later phase.

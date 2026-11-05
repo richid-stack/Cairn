@@ -1,0 +1,26 @@
+/* Storybook only. The font is bundled so screenshots look the same on every machine. */
+:root {
+  --cairn-font-sans: 'Inter Variable', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--cairn-color-bg);
+  color: var(--cairn-color-text);
+  font-family: var(--cairn-font-sans);
+  font-size: var(--cairn-text-md);
+  line-height: var(--cairn-leading-md);
+}
+
+.story-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cairn-space-3);
+}
+
+.story-stack {
+  display: grid;
+  gap: var(--cairn-space-4);
+  max-width: 24rem;
+}

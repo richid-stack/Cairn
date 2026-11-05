@@ -8,13 +8,14 @@ Cairn is a personal-agent app that handles errands, money and scheduling, and as
 
 ## Plans
 
-| Doc                                            | What it covers                                                   |
-| ---------------------------------------------- | ---------------------------------------------------------------- |
-| [docs/frontend-plan.md](docs/frontend-plan.md) | Frontend architecture, 13 phases, craft standards, quality gates |
-| [docs/backend-plan.md](docs/backend-plan.md)   | Backend architecture, trust layer, 13 phases, solo timeline      |
-| [docs/decisions.md](docs/decisions.md)         | Decisions made and decisions still open                          |
-| [docs/motion.md](docs/motion.md)               | Motion rules and timing                                          |
-| [docs/i18n.md](docs/i18n.md)                   | Translation and right-to-left approach                           |
+| Doc                                                          | What it covers                                                   |
+| ------------------------------------------------------------ | ---------------------------------------------------------------- |
+| [docs/frontend-plan.md](docs/frontend-plan.md)               | Frontend architecture, 13 phases, craft standards, quality gates |
+| [docs/backend-plan.md](docs/backend-plan.md)                 | Backend architecture, trust layer, 13 phases, solo timeline      |
+| [docs/decisions.md](docs/decisions.md)                       | Decisions made and decisions still open                          |
+| [docs/motion.md](docs/motion.md)                             | Motion rules and timing                                          |
+| [docs/i18n.md](docs/i18n.md)                                 | Translation and right-to-left approach                           |
+| [docs/design-system-checks.md](docs/design-system-checks.md) | Storybook, accessibility and screenshot checks                   |
 
 The full versions, with architecture and roadmap drawings, live as documents in the Cairn project on claude.ai. The links are at the top of each plan file.
 
@@ -33,6 +34,8 @@ Needs Node 22 and pnpm 10.
 ```
 pnpm install
 pnpm verify              # generated types, typecheck, lint, format, tests, build
+pnpm verify:visual       # every Storybook story: accessibility with contrast, and screenshots
+pnpm --filter @cairn/ui storybook   # components on :6006
 pnpm --filter @cairn/mock-server dev   # mock API on :4000
 pnpm --filter @cairn/api dev           # blank API on :4000
 pnpm --filter @cairn/web dev           # web shell on :3000

@@ -17,7 +17,8 @@
     "format:check": "prettier --check .",
     "gen": "pnpm --filter @cairn/contract gen",
     "gen:check": "pnpm gen && git diff --exit-code -- packages/contract/src/generated",
-    "verify": "pnpm gen:check && pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm build"
+    "verify": "pnpm gen:check && pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm build",
+    "verify:visual": "pnpm --filter @cairn/tokens build && pnpm --filter @cairn/ui test:visual"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",

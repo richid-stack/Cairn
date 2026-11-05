@@ -11,6 +11,9 @@ export default tseslint.config(
       '**/coverage/**',
       'packages/contract/src/generated/**',
       'apps/web/next-env.d.ts',
+      '**/storybook-static/**',
+      '**/playwright-report/**',
+      '**/test-results/**',
     ],
   },
   js.configs.recommended,
@@ -27,7 +30,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ['scripts/**', '**/*.config.*', 'packages/*/scripts/**', 'apps/*/scripts/**'],
+    files: [
+      'scripts/**',
+      '**/*.config.*',
+      'packages/*/scripts/**',
+      'apps/*/scripts/**',
+      'packages/*/visual/**',
+    ],
     rules: { 'no-console': 'off' },
   },
   {

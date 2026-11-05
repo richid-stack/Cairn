@@ -6,3 +6,7 @@ pnpm-lock.yaml
 packages/contract/src/generated
 assets
 apps/web/next-env.d.ts
+storybook-static
+playwright-report
+test-results
+**/*-snapshots

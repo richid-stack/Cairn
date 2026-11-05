@@ -16,6 +16,7 @@ const strings: Record<LocaleId, Partial<UiStrings>> = {
   ar: {
     loading: 'جارٍ التحميل',
     dismiss: 'إغلاق',
+    close: 'إغلاق',
     toastNote: 'ملاحظة',
     toastDone: 'تم',
     toastProblem: 'مشكلة',

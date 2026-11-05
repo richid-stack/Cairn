@@ -53,6 +53,7 @@
   font-size: var(--cairn-text-sm);
   font-weight: 600;
   line-height: 1;
+  text-decoration: none; /* a link styled as a button must not look underlined */
   cursor: pointer;
   user-select: none;
   transition:
@@ -355,6 +356,55 @@
   animation: cairn-dialog-in var(--cairn-duration-quick) var(--cairn-ease-enter);
 }
 
+/* Drawer: the same dialog, pinned to one edge and full height. */
+.cairn-dialog[data-placement='start'],
+.cairn-dialog[data-placement='end'] {
+  width: min(20rem, 85vw);
+  height: 100dvh;
+  max-height: none;
+  margin-block: 0;
+  border-block-width: 0;
+  border-radius: 0;
+}
+
+.cairn-dialog[data-placement='start'] {
+  margin-inline: 0 auto;
+  border-inline-start-width: 0;
+}
+
+.cairn-dialog[data-placement='end'] {
+  margin-inline: auto 0;
+  border-inline-end-width: 0;
+}
+
+.cairn-dialog[data-placement='start'][open] {
+  animation-name: cairn-drawer-in-start;
+}
+
+.cairn-dialog[data-placement='end'][open] {
+  animation-name: cairn-drawer-in-end;
+}
+
+.cairn-dialog[data-placement='start'] .cairn-dialog-body,
+.cairn-dialog[data-placement='end'] .cairn-dialog-body {
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+  align-content: start;
+}
+
+@keyframes cairn-drawer-in-start {
+  from {
+    transform: translateX(calc(-100% * var(--cairn-dir)));
+  }
+}
+
+@keyframes cairn-drawer-in-end {
+  from {
+    transform: translateX(calc(100% * var(--cairn-dir)));
+  }
+}
+
 @keyframes cairn-dialog-in {
   from {
     opacity: 0;
@@ -378,6 +428,13 @@
   display: grid;
   gap: var(--cairn-space-4);
   padding: var(--cairn-space-6);
+}
+
+.cairn-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cairn-space-3);
 }
 
 .cairn-dialog-title {

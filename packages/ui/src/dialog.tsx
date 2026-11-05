@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { Button } from './button';
+import { useUiStrings } from './i18n';
+import { Icon } from './icon';
 
 export interface DialogProps {
   open: boolean;
@@ -11,15 +14,28 @@ export interface DialogProps {
   children: ReactNode;
   /** Buttons for the bottom row. */
   actions?: ReactNode;
+  /**
+   * Where it appears. A drawer slides in from the start edge (the left in English, the right in
+   * Arabic) or the end edge, and fills the height of the screen. Used for the phone menu.
+   */
+  placement?: 'center' | 'start' | 'end';
 }
 
 /**
  * Built on the native dialog element: the browser traps focus, makes the page behind
  * inert, closes on Escape and returns focus to the button that opened it.
  */
-export function Dialog({ open, onClose, title, children, actions }: DialogProps) {
+export function Dialog({
+  open,
+  onClose,
+  title,
+  children,
+  actions,
+  placement = 'center',
+}: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+  const strings = useUiStrings();
   // Set when the parent closed the dialog, so the native close event is not reported back as a dismissal.
   const closedByParent = useRef(false);
 
@@ -41,6 +57,7 @@ export function Dialog({ open, onClose, title, children, actions }: DialogProps)
     <dialog
       ref={ref}
       className="cairn-dialog"
+      data-placement={placement}
       aria-labelledby={titleId}
       onClose={() => {
         if (closedByParent.current) closedByParent.current = false;
@@ -56,9 +73,14 @@ export function Dialog({ open, onClose, title, children, actions }: DialogProps)
       }}
     >
       <div className="cairn-dialog-body">
-        <h2 id={titleId} className="cairn-dialog-title">
-          {title}
-        </h2>
+        <div className="cairn-dialog-header">
+          <h2 id={titleId} className="cairn-dialog-title">
+            {title}
+          </h2>
+          <Button variant="ghost" size="sm" aria-label={strings.close} onClick={onClose}>
+            <Icon name="close" size="sm" />
+          </Button>
+        </div>
         <div className="cairn-dialog-content">{children}</div>
         {actions ? <div className="cairn-dialog-actions">{actions}</div> : null}
       </div>

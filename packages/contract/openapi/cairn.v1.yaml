@@ -153,6 +153,21 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Thread' }
 
+  /v1/threads/{threadId}:
+    parameters:
+      - $ref: '#/components/parameters/ThreadId'
+    get:
+      operationId: getThread
+      tags: [threads]
+      summary: Get one thread
+      responses:
+        '200':
+          description: The thread.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Thread' }
+        '404': { $ref: '#/components/responses/Error' }
+
   /v1/threads/{threadId}/messages:
     parameters:
       - $ref: '#/components/parameters/ThreadId'

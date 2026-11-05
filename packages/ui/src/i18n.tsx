@@ -11,6 +11,8 @@ export interface UiStrings {
   loading: string;
   /** The close button on a toast. */
   dismiss: string;
+  /** The close button on a dialog or drawer. */
+  close: string;
   /** Written tone before a toast message, so meaning never depends on color alone. */
   toastNote: string;
   toastDone: string;
@@ -20,6 +22,7 @@ export interface UiStrings {
 export const defaultStrings: UiStrings = {
   loading: 'Loading',
   dismiss: 'Dismiss',
+  close: 'Close',
   toastNote: 'Note',
   toastDone: 'Done',
   toastProblem: 'Problem',

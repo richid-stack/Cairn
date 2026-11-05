@@ -72,3 +72,37 @@ describe('Dialog', () => {
     await expectNoA11yViolations(container);
   });
 });
+
+describe('Dialog close button', () => {
+  it('asks the parent to close, and has a name from the strings', async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await user.click(screen.getByRole('button', { name: 'Delete memory' }));
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+});
+
+describe('Dialog placement', () => {
+  it('marks a drawer so CSS can pin it to an edge', () => {
+    render(
+      <Dialog open placement="start" title="Menu" onClose={() => {}}>
+        x
+      </Dialog>,
+    );
+    expect(screen.getByRole('dialog', { name: 'Menu' }).getAttribute('data-placement')).toBe(
+      'start',
+    );
+  });
+
+  it('is centered by default', () => {
+    render(
+      <Dialog open title="Hello" onClose={() => {}}>
+        x
+      </Dialog>,
+    );
+    expect(screen.getByRole('dialog', { name: 'Hello' }).getAttribute('data-placement')).toBe(
+      'center',
+    );
+  });
+});

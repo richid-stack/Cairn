@@ -152,3 +152,57 @@ section {
   min-width: 12rem;
   max-width: 28rem;
 }
+
+/* Page content shared by the app screens */
+.page-stack {
+  display: grid;
+  gap: var(--cairn-space-4);
+  align-content: start;
+}
+
+.page-title {
+  margin: 0;
+  font-size: var(--cairn-text-2xl, 1.75rem);
+  line-height: 1.2;
+}
+
+.page-lede {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--cairn-color-text-muted);
+}
+
+.standalone {
+  display: grid;
+  gap: var(--cairn-space-4);
+  justify-items: start;
+  max-width: 32rem;
+  margin: 12vh auto 0;
+  padding: var(--cairn-space-4);
+}
+
+/* Messages. Read-only for now; the composer and streaming come next. */
+.message-list {
+  display: grid;
+  gap: var(--cairn-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.message {
+  display: grid;
+  gap: var(--cairn-space-1);
+}
+
+.message-author {
+  font-size: var(--cairn-text-xs);
+  font-weight: 600;
+  color: var(--cairn-color-text-muted);
+}
+
+.message-text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

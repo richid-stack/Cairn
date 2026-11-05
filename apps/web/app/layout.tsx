@@ -2,12 +2,13 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { ToastProvider, themeInitScript } from '@cairn/ui';
 import { LocaleProvider } from './locale';
+import { Providers } from './providers';
 import '@cairn/tokens/tokens.css';
 import '@cairn/ui/ui.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Cairn',
+  title: { default: 'Cairn', template: '%s · Cairn' },
   description: 'A personal agent that asks before it acts.',
 };
 
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <LocaleProvider>
-          <ToastProvider>{children}</ToastProvider>
+          <ToastProvider>
+            <Providers>{children}</Providers>
+          </ToastProvider>
         </LocaleProvider>
       </body>
     </html>

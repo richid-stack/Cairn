@@ -174,6 +174,7 @@ export async function runConformance(
       ['DELETE', '/v1/model-keys/anthropic'],
       ['GET', '/v1/threads'],
       ['POST', '/v1/threads', {}],
+      ['GET', '/v1/threads/thr_x'],
       ['GET', '/v1/threads/thr_x/messages'],
       ['POST', '/v1/threads/thr_x/messages', { text: 'hello' }],
       ['GET', '/v1/threads/thr_x/events'],
@@ -233,6 +234,14 @@ export async function runConformance(
     const b = second.json as { id: string };
     if (a.id !== b.id) fail('The same Idempotency-Key created two threads');
     threadId = a.id;
+  });
+
+  await step('getThread returns the thread, and 404 for one that does not exist', async () => {
+    const reply = await call('GET', `/v1/threads/${threadId}`);
+    expectJson(reply, '/v1/threads/{threadId}', 'get', 200);
+    if ((reply.json as { id: string }).id !== threadId)
+      fail('getThread returned a different thread');
+    expectError(await call('GET', '/v1/threads/thr_missing'), 404, 'GET missing thread');
   });
 
   await step('listThreads pages with a cursor', async () => {

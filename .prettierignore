@@ -10,3 +10,5 @@ storybook-static
 playwright-report
 test-results
 **/*-snapshots
+apps/web/playwright-report
+apps/web/test-results

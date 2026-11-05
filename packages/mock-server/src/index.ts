@@ -14,6 +14,11 @@ export interface MockOptions {
   streamDelayMs?: number;
   /** A fixed clock makes every response repeatable. */
   now?: () => Date;
+  /**
+   * Adds POST /__test/reset, which empties the mock. For browser tests only, so it is off
+   * unless asked for. It is not part of the API contract.
+   */
+  testRoutes?: boolean;
 }
 
 interface ThreadState {
@@ -232,6 +237,12 @@ export function createMockServer(options: MockOptions = {}): FastifyInstance {
     }),
   );
 
+  app.get<{ Params: { threadId: string } }>('/v1/threads/:threadId', (request, reply) => {
+    const state = thread(request.params.threadId);
+    if (!state) return fail(request, reply, 404, 'not_found', 'That conversation does not exist.');
+    return send(reply, 200, state.thread);
+  });
+
   app.get<{ Params: { threadId: string }; Querystring: { cursor?: string; limit?: string } }>(
     '/v1/threads/:threadId/messages',
     (request, reply) => {
@@ -348,6 +359,18 @@ export function createMockServer(options: MockOptions = {}): FastifyInstance {
       });
     },
   );
+
+  if (options.testRoutes) {
+    app.post('/__test/reset', (_request, reply) => {
+      threads.clear();
+      order.length = 0;
+      approvals.clear();
+      keys.clear();
+      idempotent.clear();
+      counters.thr = counters.msg = counters.run = counters.apr = 0;
+      return reply.code(204).send();
+    });
+  }
 
   return app;
 }

@@ -1,0 +1,194 @@
+/* The app frame: a sidebar beside the main area, and on a phone a top bar with a drawer. */
+.shell {
+  display: grid;
+  grid-template-columns: 17.5rem minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+.shell-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
+  border-inline-end: 1px solid var(--cairn-color-border);
+  background: var(--cairn-color-surface);
+}
+
+.sidebar-body {
+  display: grid;
+  gap: var(--cairn-space-4);
+  align-content: start;
+  padding: var(--cairn-space-4);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  border-radius: var(--cairn-radius-md);
+  line-height: 0;
+}
+
+.brand img {
+  border-radius: var(--cairn-radius-md);
+  background: #fff;
+}
+
+.brand:focus-visible,
+.thread-link:focus-visible,
+.skip-link:focus-visible,
+.shell-main:focus-visible {
+  outline: 2px solid var(--cairn-color-focus);
+  outline-offset: 2px;
+}
+
+/* The main area is only focused by script after a page change, so it needs no ring of its own. */
+.shell-main:focus {
+  outline: none;
+}
+
+.shell-main {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 52rem;
+  margin-inline: auto;
+  padding: var(--cairn-space-6) var(--cairn-space-6) var(--cairn-space-8);
+}
+
+/* Top bar: phones only. */
+.shell-bar {
+  display: none;
+}
+
+@media (max-width: 47.99rem) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .shell-sidebar {
+    display: none;
+  }
+
+  .shell-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: var(--cairn-space-2);
+    padding: var(--cairn-space-2) var(--cairn-space-3);
+    border-block-end: 1px solid var(--cairn-color-border);
+    background: var(--cairn-color-bg);
+  }
+
+  .shell-main {
+    padding: var(--cairn-space-4);
+  }
+}
+
+/* The first thing a keyboard user reaches. Hidden until focused. */
+.skip-link {
+  position: absolute;
+  z-index: 100;
+  inset-inline-start: var(--cairn-space-3);
+  top: calc(-1 * var(--cairn-space-12, 3rem) - 2rem);
+  padding: var(--cairn-space-2) var(--cairn-space-4);
+  border-radius: var(--cairn-radius-md);
+  background: var(--cairn-color-accent);
+  color: var(--cairn-color-on-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: var(--cairn-space-3);
+}
+
+/* Conversation list */
+.sidebar-nav {
+  display: grid;
+  gap: var(--cairn-space-2);
+}
+
+.thread-list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.thread-link {
+  display: block;
+  min-height: 2.25rem;
+  padding: var(--cairn-space-2) var(--cairn-space-3);
+  border-radius: var(--cairn-radius-md);
+  color: var(--cairn-color-text);
+  font-size: var(--cairn-text-sm);
+  line-height: var(--cairn-leading-sm);
+  text-decoration: none;
+}
+
+.thread-link:hover {
+  background: var(--cairn-color-accent-soft);
+}
+
+.thread-link[aria-current='page'] {
+  background: var(--cairn-color-accent-soft);
+  font-weight: 600;
+  /* A bar as well as a fill, so the current page is not told by color alone. */
+  box-shadow: inset 3px 0 0 var(--cairn-color-accent);
+}
+
+[dir='rtl'] .thread-link[aria-current='page'] {
+  box-shadow: inset -3px 0 0 var(--cairn-color-accent);
+}
+
+@media (pointer: coarse) {
+  .thread-link {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.thread-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thread-empty {
+  margin: 0;
+  color: var(--cairn-color-text-muted);
+  font-size: var(--cairn-text-sm);
+  line-height: var(--cairn-leading-sm);
+}
+
+/* A failed load */
+.notice {
+  display: grid;
+  gap: var(--cairn-space-2);
+  justify-items: start;
+  padding: var(--cairn-space-3);
+  border: 1px solid var(--cairn-color-danger);
+  border-radius: var(--cairn-radius-md);
+  font-size: var(--cairn-text-sm);
+}
+
+.notice-message {
+  margin: 0;
+  font-weight: 600;
+}
+
+.notice-fix {
+  margin: 0;
+  color: var(--cairn-color-text-muted);
+}
+
+/* Inside the phone drawer the dialog already has padding. */
+.cairn-dialog .sidebar-body {
+  padding: 0;
+}

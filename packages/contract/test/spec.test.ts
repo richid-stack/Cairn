@@ -7,6 +7,7 @@ const expectedOperations = [
   'createThread',
   'deleteModelKey',
   'getHealth',
+  'getThread',
   'listAuthProviders',
   'listMessages',
   'listModelProviders',

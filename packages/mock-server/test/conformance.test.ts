@@ -70,3 +70,24 @@ describe('mock server', () => {
     expect(body.time).toBe('2026-11-03T10:00:00.000Z');
   });
 });
+
+describe('test-only reset route', () => {
+  it('does not exist unless switched on', async () => {
+    const response = await app.inject({ method: 'POST', url: '/__test/reset' });
+    expect(response.statusCode).toBe(404);
+  });
+
+  it('empties the mock when switched on', async () => {
+    const withReset = createMockServer({ testRoutes: true });
+    await withReset.inject({ method: 'POST', url: '/v1/threads', payload: { title: 'One' } });
+    const before = await withReset.inject({ method: 'GET', url: '/v1/threads' });
+    expect(before.json().items).toHaveLength(1);
+    expect((await withReset.inject({ method: 'POST', url: '/__test/reset' })).statusCode).toBe(204);
+    const after = await withReset.inject({ method: 'GET', url: '/v1/threads' });
+    expect(after.json().items).toEqual([]);
+    // Ids start again from the beginning, so tests are repeatable.
+    const again = await withReset.inject({ method: 'POST', url: '/v1/threads', payload: {} });
+    expect(again.json().id).toBe('thr_1');
+    await withReset.close();
+  });
+});

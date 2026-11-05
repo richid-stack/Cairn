@@ -25,6 +25,16 @@ export const DialogOpen: Story = {
   ),
 };
 
+export const DrawerOpen: Story = {
+  render: () => (
+    <Dialog open placement="start" title="Menu" onClose={() => {}}>
+      <nav aria-label="Example">
+        <p>Conversations go here.</p>
+      </nav>
+    </Dialog>
+  ),
+};
+
 export const MenuOpen: Story = {
   render: () => (
     <Menu

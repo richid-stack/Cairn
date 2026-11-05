@@ -10,6 +10,7 @@ import './preview.css';
 const arabic: Partial<UiStrings> = {
   loading: 'جارٍ التحميل',
   dismiss: 'إغلاق',
+  close: 'إغلاق',
   toastNote: 'ملاحظة',
   toastDone: 'تم',
   toastProblem: 'مشكلة',

@@ -8,18 +8,22 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p 3000",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "e2e": "CAIRN_API_URL=http://127.0.0.1:4010 next build && playwright test"
   },
   "dependencies": {
     "@cairn/contract": "workspace:*",
     "@cairn/tokens": "workspace:*",
     "@cairn/ui": "workspace:*",
+    "@tanstack/react-query": "5.104.5",
     "next": "^16.4.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0"
+    "@types/react-dom": "^19.0.0",
+    "axe-core": "4.14.0"
   }
 }

@@ -4,8 +4,9 @@ import type { ComponentProps, ReactNode } from 'react';
 import { cx } from './cx';
 import { Spinner } from './spinner';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+import type { ButtonSize, ButtonVariant } from './button-style';
+
+export type { ButtonSize, ButtonVariant };
 
 export interface ButtonProps extends Omit<ComponentProps<'button'>, 'children'> {
   variant?: ButtonVariant;

@@ -243,9 +243,9 @@ section {
 .composer-field {
   resize: none;
   field-sizing: content;
-  min-height: 2.5rem;
   max-height: 40dvh;
-  padding-block: var(--cairn-space-2);
+  /* Centers one line of text in the shared height, so the box and Send button line up. */
+  padding-block: calc((var(--composer-height) - 1lh - 2px) / 2);
   line-height: var(--cairn-leading-md);
 }
 
@@ -339,4 +339,20 @@ section {
   display: flex;
   flex-wrap: wrap;
   gap: var(--cairn-space-2);
+}
+
+/* The message box and Send button share one height, on a mouse and on a finger. */
+.composer {
+  --composer-height: 2.5rem;
+}
+
+@media (pointer: coarse) {
+  .composer {
+    --composer-height: 2.75rem;
+  }
+}
+
+.composer .composer-field,
+.composer .composer-row .cairn-button {
+  min-height: var(--composer-height);
 }

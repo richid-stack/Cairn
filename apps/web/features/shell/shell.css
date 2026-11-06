@@ -16,6 +16,8 @@
 
 .sidebar-body {
   display: grid;
+  /* Without this, one long conversation title stretches the whole column past the sidebar. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--cairn-space-4);
   align-content: start;
   padding: var(--cairn-space-4);
@@ -108,11 +110,13 @@
 /* Conversation list */
 .sidebar-nav {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--cairn-space-2);
 }
 
 .thread-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 2px;
   margin: 0;
   padding: 0;

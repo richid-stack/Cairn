@@ -75,7 +75,8 @@
 
 /* Touch targets are at least 44 px. */
 @media (pointer: coarse) {
-  .cairn-button {
+  .cairn-button,
+  .cairn-input {
     min-height: 2.75rem;
   }
 }

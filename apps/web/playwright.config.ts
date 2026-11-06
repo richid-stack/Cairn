@@ -24,7 +24,7 @@ export default defineConfig({
       command: 'pnpm --filter @cairn/mock-server dev',
       cwd: '../..',
       url: `${MOCK}/v1/health`,
-      env: { PORT: '4010', CAIRN_MOCK_TEST_ROUTES: '1', STREAM_DELAY_MS: '0' },
+      env: { PORT: '4010', CAIRN_MOCK_TEST_ROUTES: '1', STREAM_DELAY_MS: '30' },
       reuseExistingServer: !process.env.CI,
     },
     {

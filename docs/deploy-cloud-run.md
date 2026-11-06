@@ -80,3 +80,9 @@ Limits change often, so check each page. These are from a 2026 [roundup of free 
 | Fly.io                       | Containers             | A monthly credit of $5, not an always-free allowance                         |
 | Render                       | Containers             | Free web services sleep after 15 minutes and take 30 seconds or more to wake |
 | Vercel Hobby                 | The web app            | Personal use only; commercial use needs a paid plan                          |
+
+## Build-time settings for the web app
+
+- `CAIRN_API_URL`: where the web app's `/v1/*` requests are forwarded. Next.js fixes proxy targets when it builds, so set it when building, not only when running. It defaults to `http://127.0.0.1:4000`.
+- `NEXT_PUBLIC_CAIRN_UNDO_MS`: how long a sent message can be taken back. Defaults to 5000. The browser tests set it to 1500.
+- The proxy must not buffer `text/event-stream` responses, or replies will arrive all at once. Next.js does not buffer them. A load balancer or CDN in front may; check before launch.

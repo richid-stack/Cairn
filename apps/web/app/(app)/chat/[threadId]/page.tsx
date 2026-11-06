@@ -5,5 +5,5 @@ export const metadata: Metadata = { title: 'Conversation' };
 
 export default async function ThreadPage({ params }: { params: Promise<{ threadId: string }> }) {
   const { threadId } = await params;
-  return <ThreadView threadId={threadId} />;
+  return <ThreadView key={threadId} threadId={threadId} />;
 }

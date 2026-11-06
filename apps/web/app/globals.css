@@ -206,3 +206,137 @@ section {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
+/* Chat */
+.thread {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: var(--cairn-space-4);
+  min-height: calc(100dvh - var(--cairn-space-14, 3.5rem));
+}
+
+.thread-dock {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  gap: var(--cairn-space-2);
+  padding-block: var(--cairn-space-3);
+  background: var(--cairn-color-bg);
+}
+
+.jump-latest {
+  justify-self: center;
+}
+
+.composer {
+  display: grid;
+  gap: var(--cairn-space-2);
+}
+
+.composer-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--cairn-space-2);
+  align-items: end;
+}
+
+.composer-field {
+  resize: none;
+  field-sizing: content;
+  min-height: 2.5rem;
+  max-height: 40dvh;
+  padding-block: var(--cairn-space-2);
+  line-height: var(--cairn-leading-md);
+}
+
+.composer-undo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cairn-space-2);
+  font-size: var(--cairn-text-sm);
+  color: var(--cairn-color-text-muted);
+}
+
+.composer-notice {
+  display: grid;
+  gap: var(--cairn-space-2);
+  justify-items: start;
+}
+
+.message[data-pending] .message-text {
+  color: var(--cairn-color-text-muted);
+}
+
+.message-state {
+  font-size: var(--cairn-text-xs);
+  color: var(--cairn-color-text-muted);
+}
+
+.activity {
+  display: grid;
+  gap: var(--cairn-space-2);
+  font-size: var(--cairn-text-sm);
+  color: var(--cairn-color-text-muted);
+}
+
+.activity summary {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.activity-status {
+  margin: 0;
+}
+
+.steps {
+  display: grid;
+  gap: var(--cairn-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--cairn-space-2);
+}
+
+.connection-note {
+  font-size: var(--cairn-text-sm);
+  color: var(--cairn-color-text-muted);
+}
+
+.approval {
+  display: grid;
+  gap: var(--cairn-space-3);
+  padding: var(--cairn-space-4);
+  border: 1px solid var(--cairn-color-control);
+  border-radius: var(--cairn-radius-lg, var(--cairn-radius-md));
+  background: var(--cairn-color-surface);
+}
+
+.approval:focus {
+  outline: 2px solid var(--cairn-color-focus);
+  outline-offset: 2px;
+}
+
+.approval-title {
+  display: flex;
+  align-items: center;
+  gap: var(--cairn-space-2);
+  font-size: var(--cairn-text-md);
+}
+
+.approval-risk {
+  font-size: var(--cairn-text-sm);
+  font-weight: 600;
+  color: var(--cairn-color-text-muted);
+}
+
+.approval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cairn-space-2);
+}

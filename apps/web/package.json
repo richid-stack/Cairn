@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start -p 3000",
     "typecheck": "tsc -p tsconfig.json",
-    "e2e": "CAIRN_API_URL=http://127.0.0.1:4010 next build && playwright test"
+    "e2e": "CAIRN_API_URL=http://127.0.0.1:4010 NEXT_PUBLIC_CAIRN_UNDO_MS=1500 next build && playwright test",
+    "test": "vitest run"
   },
   "dependencies": {
     "@cairn/contract": "workspace:*",
@@ -22,8 +23,12 @@
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "axe-core": "4.14.0"
+    "axe-core": "4.14.0",
+    "jsdom": "^30.1.3",
+    "vitest": "^5.1.0"
   }
 }

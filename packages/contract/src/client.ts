@@ -7,6 +7,7 @@ export type Schemas = components['schemas'];
 export type Thread = Schemas['Thread'];
 export type Message = Schemas['Message'];
 export type Approval = Schemas['Approval'];
+export type Step = Schemas['Step'];
 export type CairnEvent = Schemas['Event'];
 export type ErrorResponse = Schemas['ErrorResponse'];
 export type AuthProvider = Schemas['AuthProvider'];
